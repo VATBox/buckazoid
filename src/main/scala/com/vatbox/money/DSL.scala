@@ -33,7 +33,7 @@ case class MoneyExchange[C <: Currency.Key](baseCurrency: Currency {type Key = C
 
     // Paralleled
     val valueInBaseCurrency = sumPerCurrency.map { m ⇒ er.convert(m.currency, baseCurrency, m.amount, exchangeDate)}
-    val total = valueInBaseCurrency.reduceLeft{(a,b) ⇒ a.zipWith(b){_+_}}//a.flatMap(a1 ⇒ b.map(a1+_))}
+    val total = valueInBaseCurrency.reduceLeft{(a,b) ⇒ a.flatMap(a1 ⇒ b.map(a1+_))}
 
     total map { Money(_, baseCurrency) }
 //    Future.reduceLeft(valueInBaseCurrency)(_+_) map { Money(_, baseCurrency)}
