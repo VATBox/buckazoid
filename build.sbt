@@ -28,8 +28,8 @@ lazy val root = (project in file(".")).
 
 
 val bintray = List(
-  publishMavenStyle := false,
-  bintrayRepository := "sbt-plugins",
+  publishMavenStyle := true,
+  bintrayRepository := "buckazoid",
   bintrayOrganization := Option("vatbox-oss"),
   bintrayVcsUrl := Option("""git@github.com:VATBox/buckazoid.git"""),
   bintrayPackageLabels := Seq("scala", "money", "currency")
