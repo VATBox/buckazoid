@@ -1,0 +1,50 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/build
+    docker:
+      - image: vatboxltd/vatbox-build-primary
+    environment:
+      SBT_VERSION: 1.0.2
+      SBT_OPTS: "-Xms512M -Xmx1536M -Xss1M"
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
+            - buckazoid-
+      - run:
+          name: sbt update
+          command: sbt -batch update dumpLicenseReport
+      - save_cache:
+          key: buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
+          paths:
+            - ~/.m2
+            - ~/.sbt
+            - ~/.ivy2
+
+      - run:
+          name: Build
+          command:  sbt -batch test
+
+      - run:
+          name: Coverage Report
+          command:  sbt -batch test coverageReport
+
+      - store_test_results:
+          path: target/test-reports
+
+      - store_artifacts:
+          path: target/license-reports
+
+      - store_artifacts:
+          path: target/*/scoverage-report
+
+      - run:
+          name: Publish
+          command: |
+            if [ -n "${CIRCLE_TAG}" ]; then
+              sbt -batch +publish
+            fi
