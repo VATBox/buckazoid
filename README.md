@@ -10,17 +10,11 @@ Scala library providing Money Type safe DLS, exchange rate conversion with Dates
 To use Buckazoid in your SBT project add the following dependency to your build.
 
 
-    "com.vatbox"  %% "buckazoid"  % "0.0.4"
+    "com.vatbox"  %% "buckazoid"  % "0.0.5"
 
 
-To use Buckazoid in your Maven project add the following dependency
-```xml
-<dependency>
-    <groupId>com.vatbox</groupId>
-    <artifactId>buckazoid_2.12</artifactId>
-    <version>0.0.4</version>
-</dependency>
-```
+To use Buckazoid in your Maven / Gradle project look at the [bintray repository](https://bintray.com/vatbox-oss/maven/buckazoid)
+
 
 ## Usage
 ```scala

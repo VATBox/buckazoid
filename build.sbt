@@ -6,18 +6,17 @@ lazy val root = (project in file(".")).
   settings(
     inThisBuild(List(
       organization := "com.vatbox",
+      name := "Buckazoid",
+      description := "Sensible money library",
       scalaVersion := "2.12.4",
-//      version      := "0.1.0-SNAPSHOT",
       crossScalaVersions := Seq(scalaVersion.value, "2.11.11"),//, "2.10.6")
       git.useGitDescribe := true,
       coverageEnabled := true,
       coverageMinimum := 80,
       coverageFailOnMinimum := true,
       coverageHighlighting := true,
-      licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+      licenses +=  ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
     ) ++ bintray),
-//    AmmoniteReplPlugin.loadSources,
-    name := "Buckazoid",
     libraryDependencies ++= Seq(
       scalaTest % Test,
       scalactic % Test,
