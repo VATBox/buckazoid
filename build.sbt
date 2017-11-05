@@ -26,7 +26,7 @@ lazy val root = (project in file(".")).
 
 val bintray = List(
   publishMavenStyle := true,
-  bintrayRepository := "buckazoid",
+  bintrayRepository := "maven",
   bintrayOrganization := Option("vatbox-oss"),
   bintrayVcsUrl := Option("""git@github.com:VATBox/buckazoid.git"""),
   bintrayPackageLabels := Seq("scala", "money", "currency")
