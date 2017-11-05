@@ -5,6 +5,8 @@ Named after [SpaceQuest money](http://spacequest.wikia.com/wiki/Buckazoid).
 
 Scala library providing Money Type safe DLS, exchange rate conversion with Dates with support for external services calls, easy money arithmetic and more.
 
+[ ![Download](https://api.bintray.com/packages/vatbox-oss/maven/buckazoid/images/download.svg) ](https://bintray.com/vatbox-oss/maven/buckazoid/_latestVersion)
+[![CircleCI](https://circleci.com/gh/VATBox/buckazoid.svg?style=svg)](https://circleci.com/gh/VATBox/buckazoid)
 
 ## Installation
 To use Buckazoid in your SBT project add the following dependency to your build.
