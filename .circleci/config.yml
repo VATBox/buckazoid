@@ -46,7 +46,4 @@ jobs:
 
       - run:
           name: Publish
-          command: |
-            if [ -n "${CIRCLE_TAG}" ]; then
-              sbt -batch +publish
-            fi
+          command: sbt -batch +publish
