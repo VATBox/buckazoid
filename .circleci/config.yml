@@ -38,9 +38,11 @@ jobs:
 
       - store_artifacts:
           path: target/license-reports
+          destination: license-reports
 
       - store_artifacts:
-          path: target/*/scoverage-report
+          path: target/scala-2.12/scoverage-report
+          destination: scoverage-report
 
       - run:
           name: Publish
