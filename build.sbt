@@ -7,7 +7,6 @@ lazy val root = (project in file(".")).
     scalaVersion := "2.12.4",
     crossScalaVersions := Seq(scalaVersion.value, "2.11.11"), //, "2.10.6")
     git.useGitDescribe := true,
-    coverageEnabled := true,
     coverageMinimum := 80,
     coverageFailOnMinimum := true,
     coverageHighlighting := true,

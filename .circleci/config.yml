@@ -26,12 +26,12 @@ jobs:
             - ~/.ivy2
 
       - run:
-          name: Build
-          command:  sbt -batch test
+          name: Test
+          command:  sbt -batch coverage test
 
       - run:
           name: Coverage Report
-          command:  sbt -batch test coverageReport
+          command:  sbt -batch coverageReport
 
       - store_test_results:
           path: target/test-reports
@@ -39,6 +39,10 @@ jobs:
       - store_artifacts:
           path: target/license-reports
           destination: license-reports
+
+      - run:
+          name: Build
+          command:  sbt -batch clean +compile
 
       - store_artifacts:
           path: target/scala-2.12/scoverage-report
