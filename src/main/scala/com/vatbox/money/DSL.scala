@@ -54,7 +54,7 @@ case class MoneyExchange[C <: Currency.Key](baseCurrency: Currency {type Key = C
 }
 
 trait ExchangeRate {
-  def convert(base: Currency, counter: Currency, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal]
+  def convert(base: Currency {type Key <: Currency.Key}, counter: Currency {type Key <: Currency.Key}, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal]
 }
 
 

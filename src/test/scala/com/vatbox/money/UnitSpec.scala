@@ -17,9 +17,7 @@ trait UnitSpec extends WordSpec
   with OptionValues
   with TryValues
   with Inside
-  with FakeConvertor {
-
-}
+  with FakeConvertor
 
 
 trait FakeConvertor {
@@ -29,7 +27,7 @@ trait FakeConvertor {
   val fakeRatio = BigDecimal(3.123, MathContext.UNLIMITED)
 
   implicit object ExchangeRateDemo extends ExchangeRate {
-    override def convert(base: Currency, counter: Currency, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
+    override def convert(base: Currency {type Key <: Currency.Key}, counter: Currency {type Key <: Currency.Key}, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
       (base, counter) match {
         case (a, b) if a == b ⇒ Future.successful {
           amount

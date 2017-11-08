@@ -101,7 +101,7 @@ class MoneySpec extends UnitSpec {
         forAll { (m1: Money[_ <: Currency.Key], c1: Currency {type Key <: Currency.Key}, ratio: BigDecimal) ⇒
           whenever(m1.currency != c1) {
             implicit object ExchangeRateDemo extends ExchangeRate {
-              override def convert(base: Currency, counter: Currency, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
+              override def convert(base: Currency {type Key <: Currency.Key}, counter: Currency {type Key <: Currency.Key}, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
                 (base, counter) match {
                   case (_, _) ⇒ Future.successful {
                     ratio * amount

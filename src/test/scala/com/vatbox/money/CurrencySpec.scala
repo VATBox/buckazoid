@@ -70,7 +70,7 @@ class CurrencySpec extends UnitSpec {
       val testDate = Instant.parse("2017-10-05T00:00:00.000Z")
 
       implicit object ExchangeRateDemo extends ExchangeRate {
-        override def convert(base: Currency, counter: Currency, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
+        override def convert(base: Currency {type Key <: Currency.Key}, counter: Currency {type Key <: Currency.Key}, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
           (base, counter) match {
             case (TC6, TC7) if exchangeDate == testDate ⇒ Future.successful { 2.55 * amount }
             case (TC7, TC6) if exchangeDate == testDate ⇒ Future.successful { 1/2.55 * amount }
@@ -117,7 +117,7 @@ class CurrencySpec extends UnitSpec {
       "calculate convert amounts" in {
         val fakeRatio = BigDecimal(3.123, MathContext.UNLIMITED)
         implicit object ExchangeRateDemo extends ExchangeRate {
-          override def convert(base: Currency, counter: Currency, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
+          override def convert(base: Currency {type Key <: Currency.Key}, counter: Currency {type Key <: Currency.Key}, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
             (base, counter) match {
               case (_, _)  ⇒ Future.successful { fakeRatio * amount }
             }
@@ -136,7 +136,7 @@ class CurrencySpec extends UnitSpec {
       "calculate convert money" in {
         val fakeRatio = BigDecimal(3.123, MathContext.UNLIMITED)
         implicit object ExchangeRateDemo extends ExchangeRate {
-          override def convert(base: Currency, counter: Currency, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
+          override def convert(base: Currency {type Key <: Currency.Key}, counter: Currency {type Key <: Currency.Key}, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
             (base, counter) match {
               case (_, _)  ⇒ Future.successful { fakeRatio * amount }
             }
