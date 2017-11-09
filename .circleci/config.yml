@@ -15,15 +15,10 @@ jobs:
           keys:
             - buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
             - buckazoid-
+
       - run:
           name: sbt update
           command: sbt -batch update dumpLicenseReport
-      - save_cache:
-          key: buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
-          paths:
-            - ~/.m2
-            - ~/.sbt
-            - ~/.ivy2
 
       - run:
           name: Test
@@ -40,13 +35,20 @@ jobs:
           path: target/license-reports
           destination: license-reports
 
+      - store_artifacts:
+          path: target/scala-2.12/scoverage-report
+          destination: scoverage-report
+
       - run:
           name: Build
           command:  sbt -batch clean +compile
 
-      - store_artifacts:
-          path: target/scala-2.12/scoverage-report
-          destination: scoverage-report
+      - save_cache:
+          key: buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
+          paths:
+            - ~/.m2
+            - ~/.sbt
+            - ~/.ivy2
 
       - run:
           name: Publish
