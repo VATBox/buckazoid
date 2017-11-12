@@ -1,39 +1,15 @@
 package com.vatbox.money
 
-import java.math.MathContext
-
 import com.vatbox.money.Money.ToBigDecimal
-
 import scala.math.BigDecimal
-import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
-import java.math.{RoundingMode ⇒ JavaRoundingMode}
 import scala.util.{Failure, Try}
-
-trait MoneyContext {
-  def defaultCurrency: Currency {type Key <: Currency.Key} = USD
-
-  def scale: Int = 4
-
-  def roundingMode: RoundingMode = RoundingMode.HALF_EVEN
-
-  def precision: Int = 34
-
-  def mathContext: MathContext = new MathContext(precision, JavaRoundingMode.valueOf(roundingMode.id))
-
-  def currencyFormatDecimals: Int = 2
-
-  def parseNotFound(currencyCode: String): Currency {type Key <: Currency.Key} = throw NoSuchCurrencyException("Currency not found", currencyCode)
-}
-
-object MoneyContext {
-  implicit val defaultMoneyContext = new MoneyContext {}
-}
 
 
 class Money[C <: Currency.Key] private(a: BigDecimal)(val currency: Currency {type Key = C})(implicit mc: MoneyContext) extends Serializable with Ordered[Money[C]] {
 
   val amount: BigDecimal = new BigDecimal(a.bigDecimal, mc.mathContext)
+
   def +(that: Money[C]): Money[C] =
     Money(this.amount + that.amount, this.currency)
 
@@ -50,10 +26,10 @@ class Money[C <: Currency.Key] private(a: BigDecimal)(val currency: Currency {ty
   def -[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyExchange[C] =
     MoneyExchange(currency, that.moneySeq.map(-_) :+ this)
 
-//  def +[B: ToBigDecimal](that: B): Money[C] =
-//    Money(this.amount + that, this.currency)
-//
-//  def -[B: ToBigDecimal](that: B): Money[C] = this + (-that)
+  //  def +[B: ToBigDecimal](that: B): Money[C] =
+  //    Money(this.amount + that, this.currency)
+  //
+  //  def -[B: ToBigDecimal](that: B): Money[C] = this + (-that)
 
   def *[B: ToBigDecimal](that: B): Money[C] = Money(this.amount * that, this.currency): Money[C]
 
@@ -120,7 +96,7 @@ class Money[C <: Currency.Key] private(a: BigDecimal)(val currency: Currency {ty
 
   override def toString: String = amount.toString + " " + currency.code
 
-  def toFormattedString: String = currency.symbol + amount.setScale(currency.formatDecimals, BigDecimal.RoundingMode.HALF_EVEN).toString
+  def toFormattedString: String = currency.symbol + amount.setScale(currency.exponent, mc.roundingMode).toString
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Money[C]]
 
@@ -146,6 +122,8 @@ object Money {
   }
 
   def apply[B: ToBigDecimal](value: B)(implicit mc: MoneyContext) = new Money(implicitly[ToBigDecimal[B]].apply(value))(mc.defaultCurrency)
+
+  def unapply[C <: Currency.Key](money: Money[C]): Option[(BigDecimal, Currency {type Key = C})] = Some(money.amount, money.currency)
 
   def apply[C <: Currency.Key, B: ToBigDecimal](value: B, currency: Currency {type Key = C}) = new Money[C](implicitly[ToBigDecimal[B]].apply(value))(currency)
 

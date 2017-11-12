@@ -8,7 +8,7 @@ class CurrencySpec extends UnitSpec {
   "Currency" when {
     "Instances" should {
       "Be equal to itself" in {
-        object TC1 extends Currency("TC", "TestCurrency 1", "%", 2)
+        object TC1 extends Currency("TC", "TestCurrency 1", "%", 2, None, None, None)
         TC1 should equal (TC1)
 
         val tc2 = Currency("TC2", "TestCurrency 1", "%", 2)
@@ -23,13 +23,13 @@ class CurrencySpec extends UnitSpec {
       }
 
       "Be equal to other instances for same type" in {
-        object TC1 extends Currency("TC", "TestCurrency 1", "%", 2)
+        object TC1 extends Currency("TC", "TestCurrency 1", "%", 2, None, None, None)
         val tc2 = Currency("TC", "TestCurrency 1", "%", 2)
         TC1 should equal (tc2)
       }
 
       "Be Equal to 'dynamic' created currency" in {
-        object TC1 extends Currency("TC", "TestCurrency 1", "%", 2)
+        object TC1 extends Currency("TC", "TestCurrency 1", "%", 2, None, None, None)
         Currency("TC") should equal (TC1)
       }
 
@@ -42,12 +42,12 @@ class CurrencySpec extends UnitSpec {
       }
 
       "Have same hashcode for equal instances" in {
-        object TC1 extends Currency("TC", "TestCurrency 1", "%", 2)
+        object TC1 extends Currency("TC", "TestCurrency 1", "%", 2, None, None, None)
         TC1.## === Currency("TC", "TestCurrency 1", "%", 2).##
       }
 
       "Available in currencies list" in {
-        object TC4 extends Currency("TC4", "TestCurrency 4", "%", 2)
+        object TC4 extends Currency("TC4", "TestCurrency 4", "%", 2, None, None, None)
         TC4 // defined and loaded
         Currency.getCurrencies should contain key ("TC4")
         Currency.getCurrencies("TC4") should be (TC4)
@@ -64,8 +64,8 @@ class CurrencySpec extends UnitSpec {
       import scala.concurrent.Future
       import scala.concurrent.ExecutionContext.Implicits.global
 
-      object TC6 extends Currency("TC6", "TestCurrency 6", "%", 2)
-      object TC7 extends Currency("TC7", "TestCurrency 7", "%", 2)
+      object TC6 extends Currency("TC6", "TestCurrency 6", "%", 2, None, None, None)
+      object TC7 extends Currency("TC7", "TestCurrency 7", "%", 2, None, None, None)
 
       val testDate = Instant.parse("2017-10-05T00:00:00.000Z")
 
@@ -96,7 +96,7 @@ class CurrencySpec extends UnitSpec {
       }
 
       "fail to convert fails" in {
-        object TC8 extends Currency("TC8", "TestCurrency 8", "%", 2)
+        object TC8 extends Currency("TC8", "TestCurrency 8", "%", 2, None, None, None)
         val tcConvert = TC6 to TC8 at testDate
         assert(tcConvert.rate.failed.futureValue.isInstanceOf[ExchangeRateException])
       }
