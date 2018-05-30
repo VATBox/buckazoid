@@ -39,7 +39,7 @@ scala> 5(USD) + 10(USD) * 2 + USD(20) + Money(5, USD)
 res2: com.vatbox.money.Money[com.vatbox.money.USD.Key] = 50 USD
 
 scala> implicit object ExchangeRateDemo extends ExchangeRate {
-         override def convert(base: Currency, counter: Currency, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
+         override def convert(base: Currency {type Key <: Currency.Key}, counter: Currency {type Key <: Currency.Key}, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal] = {
            (base, counter) match {
              case (f, b) if f == b ⇒ Future.successful { amount }
              case (ILS, USD) ⇒ convert(USD, ILS, 1, exchangeDate) map (1 / _ * amount)
@@ -48,8 +48,8 @@ scala> implicit object ExchangeRateDemo extends ExchangeRate {
              case (EUR, ILS) ⇒ Future.successful { 10 * amount }
              case (EUR, USD) ⇒ convert(EUR, ILS, 1, exchangeDate) flatMap {ratio ⇒ convert(ILS, USD, ratio * amount, exchangeDate)}
              case (USD, EUR) ⇒ convert(USD, ILS, 1, exchangeDate) flatMap {ratio ⇒ convert(ILS, EUR, ratio * amount, exchangeDate)}
-             case (Currency("TST",_,_,_), USD) ⇒ Future.successful { 99 * amount }
-             case (USD, Currency("TST",_,_,_)) ⇒ convert(Currency("TST"), USD, 1, exchangeDate) map (1 / _ * amount)
+             case (Currency("TST",_,_,_,_,_,_), USD) ⇒ Future.successful { 99 * amount }
+             case (USD, Currency("TST",_,_,_,_,_,_)) ⇒ convert(Currency("TST"), USD, 1, exchangeDate) map (1 / _ * amount)
              case _ ⇒ Future.failed {
                ExchangeRateException(s"Fail to convert $base to $counter")
              }
@@ -58,18 +58,22 @@ scala> implicit object ExchangeRateDemo extends ExchangeRate {
        }
 defined object ExchangeRateDemo
 
-scala> val total = EUR(5) + USD(10) + ILS(20) at Instant.now foreach println
-total: Unit = ()
+scala> val total = EUR(5) + USD(10) + ILS(20) at Instant.now
+total: scala.concurrent.Future[com.vatbox.money.Money[com.vatbox.money.EUR.Key]] = Future(<not completed>)
+total foreach println
 12.0 EUR
 
-scala> val totalinILS = EUR(5) + USD(10) + ILS(20) in ILS at Instant.now foreach println
-totalinILS: Unit = ()
+scala> EUR(5) + USD(10) + ILS(20) in ILS at Instant.now foreach println
 120 ILS
 
 scala> val usd2eur = USD to EUR at Instant.now
-usd2eur: com.vatbox.money.CurrencyExchangeRate[com.vatbox.money.USD.Key,com.vatbox.money.EUR.Key] = CurrencyExchangeRate(Currency(USD,US Dollar,$,2),Currency(EUR,Euro,€,2),2017-11-03T06:41:01.336Z)
+usd2eur: com.vatbox.money.CurrencyExchangeRate[com.vatbox.money.USD.Key,com.vatbox.money.EUR.Key] = CurrencyExchangeRate(Currency(USD,United States dollar,$,2,None,None,None),Currency(EUR,Euro,€,2,None,None,None),2018-05-30T11:30:52.728Z)
 
-scala> usd2eur convert (10) foreach println
+scala> val tenUsdInEur = usd2eur convert (10)
+TenUsdInEur: scala.concurrent.Future[com.vatbox.money.Money[com.vatbox.money.EUR.Key]] = Future(<not completed>)
+scala> tenUsdInEur
+scala.concurrent.Future[com.vatbox.money.Money[com.vatbox.money.EUR.Key]] = Future(Success(5.0 EUR))
+scala> TenUsdInEur foreach println
 5.0 EUR
 
 scala> usd2eur.rate foreach println
@@ -77,14 +81,14 @@ scala> usd2eur.rate foreach println
 
 
 scala> val eur2usd = usd2eur.inverse
-eur2usd: com.vatbox.money.CurrencyExchangeRate[com.vatbox.money.EUR.Key,com.vatbox.money.USD.Key] = CurrencyExchangeRate(Currency(EUR,Euro,€,2),Currency(USD,US Dollar,$,2),2017-11-03T06:41:01.336Z)
+eur2usd: com.vatbox.money.CurrencyExchangeRate[com.vatbox.money.EUR.Key,com.vatbox.money.USD.Key] = CurrencyExchangeRate(Currency(EUR,Euro,€,2,None,None,None),Currency(USD,United States dollar,$,2,None,None,None),2018-05-30T11:30:52.728Z)
        
 scala> eur2usd.rate foreach println
 2.0
 
 
 scala> val handerEurToUSD = 100(EUR) in USD
-handerEurToUSD: com.vatbox.money.MoneyExchange[com.vatbox.money.USD.Key] = MoneyExchange(Currency(USD,US Dollar,$,2),List(100 EUR))
+handerEurToUSD: com.vatbox.money.MoneyExchange[com.vatbox.money.USD.Key] = MoneyExchange(Currency(USD,United States dollar,$,2,None,None,None),List(100 EUR))
 
 scala> handerEurToUSD at Instant.now foreach println
 200.0 USD
