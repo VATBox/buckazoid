@@ -18,15 +18,15 @@ jobs:
 
       - run:
           name: sbt update
-          command: sbt -batch update dumpLicenseReport
+          command: sbt update dumpLicenseReport
 
       - run:
           name: Test
-          command:  sbt -batch coverage test
+          command:  sbt coverage test
 
       - run:
           name: Coverage Report
-          command:  sbt -batch coverageReport
+          command:  sbt coverageReport
 
       - store_test_results:
           path: target/test-reports
@@ -41,7 +41,7 @@ jobs:
 
       - run:
           name: Build
-          command:  sbt -batch clean +compile
+          command: sbt clean +compile
 
       - save_cache:
           key: buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
@@ -52,4 +52,4 @@ jobs:
 
       - run:
           name: Publish
-          command: sbt -batch +publish
+          command: sbt +publish
