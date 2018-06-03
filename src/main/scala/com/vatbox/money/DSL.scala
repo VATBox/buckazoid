@@ -55,8 +55,6 @@ case class MoneyExchange[C <: Currency.Key](baseCurrency: Currency {type Key = C
   def in[C2 <: Currency.Key](unit: Currency {type Key = C2}): MoneyExchange[C2] =
     MoneyExchange(unit, moneySeq)
 
-  def ===(that: Money[C]): Boolean = this.equals(that)
-
   def ===[C2 <: Currency.Key](that: Money[C2]): MoneyCompare[C, C2] = {
     this === (MoneyExchange(that.currency, Seq[Money[_ <: Currency.Key]](that)))
   }

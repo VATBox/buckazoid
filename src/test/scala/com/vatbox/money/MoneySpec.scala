@@ -187,7 +187,7 @@ class MoneySpec extends UnitSpec {
       }
       "Dividing money with scalar" in {
         forAll { (m1: Money[_ <: Currency.Key], scalar: BigDecimal) ⇒
-          whenever(scalar != 0) {
+          whenever(scalar != BigDecimal(0)) { //TODO: Checkout why BigDecimal("0E+19") != 0
             (m1 / scalar).amount should equal(m1.amount / scalar)
 //            (m1 / scalar).currency should equal(m1.currency)
           }

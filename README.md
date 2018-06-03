@@ -93,6 +93,16 @@ handerEurToUSD: com.vatbox.money.MoneyExchange[com.vatbox.money.USD.Key] = Money
 scala> handerEurToUSD at Instant.now foreach println
 200.0 USD
 
+scala> 100.2(EUR) ==~ 100(EUR) +- 0.5
+res8: Boolean = true
+
+scala> 10(USD) >~ 9(USD) ± 2
+res9: Boolean = false
+
+scala> 50.0(EUR) === (100(USD) in EUR) at Instant.now foreach println
+true
+
+
 ```
 
 ## Other money libraries
