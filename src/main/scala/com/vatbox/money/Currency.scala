@@ -358,5 +358,3 @@ object ZWR extends Currency("ZWR", "Zimbabwean dollar A/09", "", 2, Some(LocalDa
 object BTC extends Currency("BTC", "BitCoin", "B", 15, None, None, None)
 
 object BKZ extends Currency("BKZ", "SpaceQuest Buckazoid", "bz", 2, None, None, None)
-
-

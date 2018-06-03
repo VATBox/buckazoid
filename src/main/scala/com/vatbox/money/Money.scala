@@ -1,6 +1,7 @@
 package com.vatbox.money
 
 import com.vatbox.money.Money.ToBigDecimal
+
 import scala.math.BigDecimal
 import scala.math.BigDecimal.RoundingMode.RoundingMode
 import scala.util.{Failure, Try}
@@ -112,6 +113,17 @@ class Money[C <: Currency.Key] private(a: BigDecimal)(val currency: Currency {ty
     val state = Seq(amount, currency)
     state.map(_.hashCode()).foldLeft(0)((a, b) ⇒ 31 * a + b)
   }
+
+  def ===(that: Money[C]): Boolean = this.equals(that)
+
+  def ===[C2 <: Currency.Key](that: Money[C2]): MoneyCompare[C, C2] = {
+    this === (MoneyExchange(that.currency, Seq[Money[_ <: Currency.Key]](that)))
+  }
+
+  def ===[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyCompare[C, C2] = {
+    MoneyCompare(MoneyExchange(this.currency, Seq[Money[_ <: Currency.Key]](this)), that)
+  }
+
 }
 
 

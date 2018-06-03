@@ -88,6 +88,36 @@ class MoneySpec extends UnitSpec {
 
     }
 
+    "value equality" should {
+      "equal for same currency" in {
+        forAll { (c1: Currency {type Key <: Currency.Key}, amount1: BigDecimal, amount2: BigDecimal) ⇒
+          val m1 = Money(amount1, c1)
+          val m2 = Money(amount2, c1)
+          (m1 === m2) should equal(amount1 == amount2)
+        }
+      }
+      "equal for different money" when {
+        "converting to same currency" in {
+          forAll { (m1: Money[_ <: Currency.Key], m2: Money[_ <: Currency.Key]) ⇒
+            whenever(m1.currency != m2.currency) {
+              whenReady(m1 === m2 at Instant.now) {
+                _ should equal (m1.amount == fakeRatio*m2.amount)//(Money(m1.amount+(fakeRatio*m2.amount), m1.currency))
+              }
+            }
+          }
+        }
+        "used in math operations" in {
+          forAll { (m1: Money[_ <: Currency.Key], m2: Money[_ <: Currency.Key]) ⇒
+            whenever(m1.currency != m2.currency) {
+              val expected = Money(m1.amount+(fakeRatio*m2.amount), m1.currency)
+              whenReady(m1 + m2 === expected at Instant.now) {
+                _ should equal (true)
+              }
+            }
+          }
+        }
+      }
+    }
 
     "converting to other money" should {
       import java.time.Instant

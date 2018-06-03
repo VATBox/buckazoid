@@ -76,4 +76,35 @@ class DslSpec extends UnitSpec {
       }
     }
   }
+
+  "MoneyTolerance" should {
+    "ignore amount different within the tolerance" when {
+      "check for equal" in {
+        forAll { (c1: Currency {type Key <: Currency.Key}, amount1: BigDecimal, amount2: BigDecimal, tolerance : BigDecimal) ⇒
+          val m1 = Money(amount1, c1)
+          val m2 = Money(amount2, c1)
+          (m1 +- tolerance ==~ m2) should be (m1 ==~ m2 +- tolerance)
+        }
+      }
+
+      "check for smaller" in {
+        forAll(maxDiscardedFactor(10)) { (c1: Currency {type Key <: Currency.Key}, amount1: BigDecimal, amount2: BigDecimal, tolerance : BigDecimal) ⇒
+          whenever(amount1 + tolerance < amount2 && tolerance >= 0) {
+            val m1 = Money(amount1, c1)
+            val m2 = Money(amount2, c1)
+            (m1 +- tolerance <~ m2) should be (true)
+          }
+        }
+      }
+      "check for greater" in {
+        forAll(maxDiscardedFactor(10)) { (c1: Currency {type Key <: Currency.Key}, amount1: BigDecimal, amount2: BigDecimal, tolerance : BigDecimal) ⇒
+          whenever(amount1 - tolerance > amount2 && tolerance >= 0) {
+            val m1 = Money(amount1, c1)
+            val m2 = Money(amount2, c1)
+            (m1 +- tolerance >~ m2) should be (true)
+          }
+        }
+      }
+    }
+  }
 }

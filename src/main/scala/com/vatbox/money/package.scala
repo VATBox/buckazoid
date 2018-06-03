@@ -2,6 +2,8 @@ package com.vatbox
 
 import com.vatbox.money.Money.ToBigDecimal
 
+import scala.math.BigDecimal
+
 
 package object money {
 
@@ -61,5 +63,9 @@ package object money {
 //    def *[C <: Currency.Key](m: Money[C]): Money[C] = Money(implicitly[Numeric[N]].toDouble(x) * m.amount, m.currency)
 //  }
 
-
+  implicit class MoneyToMoneyTolerance[C <: Currency.Key](val m: Money[C]) {
+    def +-(tolerance: BigDecimal): MoneyTolerance[C] = MoneyTolerance(m, tolerance)
+    def ±(tolerance: BigDecimal): MoneyTolerance[C] = +-(tolerance)
+  }
+  implicit def moneyToMoneyTolerance[C <: Currency.Key](m: Money[C]) = MoneyTolerance(m, 0)
 }
