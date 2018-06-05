@@ -50,6 +50,13 @@ jobs:
             - ~/.sbt
             - ~/.ivy2
 
-      - run:
+      - deploy:
           name: Publish
+          requires:
+            - Build
+          filters:
+          tags:
+            only: /^v.*/
+          branches:
+            ignore: /.*/
           command: sbt +publish
