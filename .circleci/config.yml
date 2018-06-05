@@ -52,11 +52,7 @@ jobs:
 
       - deploy:
           name: Publish
-          requires:
-            - Build
-          filters:
-          tags:
-            only: /^v.*/
-          branches:
-            ignore: /.*/
-          command: sbt +publish
+          command: |
+            if [ -n "${CIRCLE_TAG}" ]; then
+              sbt +publish
+            fi
