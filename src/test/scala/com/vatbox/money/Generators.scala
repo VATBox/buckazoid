@@ -1,8 +1,7 @@
 package com.vatbox.money
 
-import java.time.{LocalDate, Year, ZoneOffset}
+import java.time.LocalDate
 
-import com.vatbox.money.Money.ToBigDecimal
 import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {

@@ -3,9 +3,9 @@ package com.vatbox.money
 import java.math.MathContext
 import java.time.Instant
 
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 import scala.concurrent.Future
 
@@ -21,8 +21,6 @@ trait UnitSpec extends WordSpec
 
 
 trait FakeConvertor {
-
-  import scala.concurrent.ExecutionContext.Implicits.global
 
   val fakeRatio = BigDecimal(3.123, MathContext.UNLIMITED)
 

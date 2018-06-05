@@ -2,6 +2,7 @@ package com.vatbox.money
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
+
 import com.vatbox.money.Generators._
 
 

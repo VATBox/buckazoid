@@ -1,8 +1,10 @@
 package com.vatbox.money
 
 import java.math.MathContext
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.language.postfixOps
 
-import Generators.currencyArb
+import com.vatbox.money.Generators.currencyArb
 
 class CurrencySpec extends UnitSpec {
   "Currency" when {
@@ -61,8 +63,8 @@ class CurrencySpec extends UnitSpec {
 
     "converting to other currency" should {
       import java.time.Instant
+
       import scala.concurrent.Future
-      import scala.concurrent.ExecutionContext.Implicits.global
 
       object TC6 extends Currency("TC6", "TestCurrency 6", "%", 2, None, None, None)
       object TC7 extends Currency("TC7", "TestCurrency 7", "%", 2, None, None, None)

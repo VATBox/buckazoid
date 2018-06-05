@@ -1,12 +1,10 @@
 package com.vatbox.money
 
-import java.math.MathContext
 import java.time.Instant
 
-import com.vatbox.money.Generators._
-
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+
+import com.vatbox.money.Generators._
 
 class MoneySpec extends UnitSpec {
   "Money" when {

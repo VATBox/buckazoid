@@ -1,6 +1,5 @@
 package com.vatbox.money
 
-import java.time.{Instant, LocalDate}
 import com.vatbox.money.Generators._
 
 class ImplicitSpec extends UnitSpec {
