@@ -135,7 +135,7 @@ object Money {
 
   def apply[B: ToBigDecimal](value: B)(implicit mc: MoneyContext) = new Money(implicitly[ToBigDecimal[B]].apply(value))(mc.defaultCurrency)
 
-  def unapply[C <: Currency.Key](money: Money[C]): Option[(BigDecimal, Currency {type Key = C})] = Some(money.amount, money.currency)
+  def unapply[C <: Currency.Key](money: Money[C]): Option[(BigDecimal, Currency {type Key = C})] = Some((money.amount, money.currency))
 
   def apply[C <: Currency.Key, B: ToBigDecimal](value: B, currency: Currency {type Key = C}) = new Money[C](implicitly[ToBigDecimal[B]].apply(value))(currency)
 
@@ -153,23 +153,3 @@ object Money {
 
   type ToBigDecimal[A] = A ⇒ BigDecimal
 }
-
-
-//class MoneyNumeric[C <: Currency.Key]()(implicit mc: MoneyContext) extends Numeric[Money[C]] {
-//  def plus(x: Money[C], y: Money[C]) = x + y
-//  def minus(x: Money[C], y: Money[C]) = x - y
-//  def times(x: Money[C], y: Money[C]) = throw new UnsupportedOperationException("Numeric.times not supported for Quantities")
-//  def negate(x: Money[C]) = -x
-//  def fromInt(x: Int) = throw new IllegalArgumentException
-//  def toInt(x: Money[C]) = x.amount.toInt
-//  def toLong(x: Money[C]) = x.amount.toLong
-//  def toFloat(x: Money[C]) = x.amount.toFloat
-//  def toDouble(x: Money[C]) = x.amount.toDouble
-//  def compare(x: Money[C], y: Money[C]) = if (x.amount > y.amount) 1 else if (x.amount < y.amount) -1 else 0
-//
-//  /**
-//    * Custom implementation using SortedSets to ensure consistent output
-//    * @return String representation of this instance
-//    */
-//  override def toString: String = s"MoneyNumeric($mc)"
-//}

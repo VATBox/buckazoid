@@ -6,6 +6,13 @@ lazy val root = (project in file(".")).
   settings(
     scalaVersion := "2.12.6",
     crossScalaVersions := Seq(scalaVersion.value, "2.11.12"), //, "2.10.6")
+    scalacOptions := Seq(
+      "-unchecked",
+      "-deprecation",
+      "-feature",
+      "-Xlint",
+      "-Ywarn-dead-code",
+      "-encoding", "utf8"),
     git.useGitDescribe := true,
     coverageMinimum := 80,
     coverageFailOnMinimum := true,

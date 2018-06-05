@@ -2,8 +2,8 @@ package com.vatbox
 
 import com.vatbox.money.Money.ToBigDecimal
 
+import scala.language.implicitConversions
 import scala.math.BigDecimal
-
 
 package object money {
 
@@ -13,18 +13,14 @@ package object money {
   }
 
 //  implicit def FloatToBigDecima(x: Float): BigDecimal = BigDecimal(x)
-//  implicit def BigIntToBigDecima(x: BigInt): BigDecimal = BigDecimal(x)
+  implicit def BigIntToBigDecima(x: BigInt): BigDecimal = BigDecimal(x)
 
 
   implicit class IntWithMoney(val x: Int) extends AnyVal {
-//    def +[C <: Currency.Key](m: Money[C]): Money[C] = Money(x + m.amount, m.currency)
-//    def -[C <: Currency.Key](m: Money[C]): Money[C] = Money(x - m.amount, m.currency)
     def *[C <: Currency.Key](m: Money[C]): Money[C] = m * x
   }
 
   implicit class LongWithMoney(val x: Long) extends AnyVal {
-//    def +[C <: Currency.Key](m: Money[C]): Money[C] = Money(x + m.amount, m.currency)
-//    def -[C <: Currency.Key](m: Money[C]): Money[C] = Money(x - m.amount, m.currency)
     def *[C <: Currency.Key](m: Money[C]): Money[C] = m * x
   }
 
@@ -35,33 +31,16 @@ package object money {
 //  }
 
   implicit class DoubleWithMoney(val x: Double) extends AnyVal {
-//    def +[C <: Currency.Key](m: Money[C]): Money[C] = Money(x + m.amount, m.currency)
-//    def -[C <: Currency.Key](m: Money[C]): Money[C] = Money(x - m.amount, m.currency)
     def *[C <: Currency.Key](m: Money[C]): Money[C] = m * x
   }
 
   implicit class BigDecimalWithMoney(val x: BigDecimal) extends AnyVal {
-//    def +[C <: Currency.Key](m: Money[C]): Money[C] = Money(x + m.amount, m.currency)
-//    def -[C <: Currency.Key](m: Money[C]): Money[C] = Money(x - m.amount, m.currency)
     def *[C <: Currency.Key](m: Money[C]): Money[C] = m * x
   }
 
-//  implicit class BigIntWithMoney(val x: BigInt) extends AnyVal {
-//    def +[C <: Currency.Key](m: Money[C]): Money[C] = Money(BigDecimal(x) + m.amount, m.currency)
-//    def -[C <: Currency.Key](m: Money[C]): Money[C] = Money(BigDecimal(x) - m.amount, m.currency)
-//    def *[C <: Currency.Key](m: Money[C]): Money[C] = Money(BigDecimal(x) * m.amount, m.currency)
-//  }
-
-//  implicit def IntWithMoney(x: Int) = new NumericWithMoney[Int](x)
-//  implicit def LongWithMoney(x: Long) = new NumericWithMoney[Long](x)
-//  implicit def FloatWithMoney(x: Float) = new NumericWithMoney[Float](x)
-//  implicit def DoubleWithMoney(x: Double) = new NumericWithMoney[Double](x)
-//
-//  implicit class NumericWithMoney[N: Numeric](val x: N) {
-//    def +[C <: Currency.Key](m: Money[C]): Money[C] = Money(implicitly[Numeric[N]].toDouble(x) + m.amount, m.currency)
-//    def -[C <: Currency.Key](m: Money[C]): Money[C] = Money(implicitly[Numeric[N]].toDouble(x) - m.amount, m.currency)
-//    def *[C <: Currency.Key](m: Money[C]): Money[C] = Money(implicitly[Numeric[N]].toDouble(x) * m.amount, m.currency)
-//  }
+  implicit class BigIntWithMoney(val x: BigInt) extends AnyVal {
+    def *[C <: Currency.Key](m: Money[C]): Money[C] = Money(BigDecimal(x) * m.amount, m.currency)
+  }
 
   implicit class MoneyToMoneyTolerance[C <: Currency.Key](val m: Money[C]) {
     def +-(tolerance: BigDecimal): MoneyTolerance[C] = MoneyTolerance(m, tolerance)

@@ -34,10 +34,6 @@ case class Currency(code: String, name: String, symbol: String, exponent: Int, f
 }
 
 object Currency {
-
-  //  type Aux[A0, B0] = Foo[A0] { type B = B0  }
-  //  type Aux[K <: Currency.Key] = Currency {type Key <: K}
-
   trait Key
 
   case class Evidence[C <: Currency.Key](currency: Currency {type Key = C})

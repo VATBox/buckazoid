@@ -2,8 +2,6 @@ package com.vatbox.money
 
 import java.time.{Instant, LocalDate, ZoneOffset}
 
-import scala.concurrent.{ExecutionContext, Future}
-
 
 object DateTimeUtils {
   implicit class LocalDateToInstance(val d: LocalDate) extends AnyVal {

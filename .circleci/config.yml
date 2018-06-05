@@ -28,6 +28,13 @@ jobs:
           name: Coverage Report
           command:  sbt coverageReport
 
+      - save_cache:
+          key: buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
+          paths:
+            - ~/.m2
+            - ~/.sbt
+            - ~/.ivy2
+
       - store_test_results:
           path: target/test-reports
 
@@ -42,13 +49,6 @@ jobs:
       - run:
           name: Build
           command: sbt clean +compile
-
-      - save_cache:
-          key: buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
-          paths:
-            - ~/.m2
-            - ~/.sbt
-            - ~/.ivy2
 
       - deploy:
           name: Publish
