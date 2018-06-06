@@ -63,6 +63,19 @@ class DslSpec extends UnitSpec {
         }
       }
     }
+
+    "change sign for unary minus" in {
+      forAll { (m1: Money[_ <: Currency.Key], m2: Money[_ <: Currency.Key]) ⇒
+        val me = m1 + m2
+        val meNeg = -me
+        whenReady(me at Instant.now) { meRes ⇒
+          whenReady(meNeg at Instant.now) { meNegRes ⇒
+            ((meRes * -1)) should be (meNegRes * 1) // meNegRes * 1 to be align with precision
+          }
+        }
+        whenReady((me + meNeg) at Instant.now) { _ should be (Money(0, m1.currency)) }
+      }
+    }
   }
 
   "CurrencyExchange" should {

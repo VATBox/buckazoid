@@ -185,7 +185,7 @@ class MoneySpec extends UnitSpec {
       }
       "Dividing money with scalar" in {
         forAll { (m1: Money[_ <: Currency.Key], scalar: BigDecimal) ⇒
-          whenever(scalar != BigDecimal(0)) { //TODO: Checkout why BigDecimal("0E+19") != 0
+          whenever(scalar != BigDecimal(0)) {
             (m1 / scalar).amount should equal(m1.amount / scalar)
 //            (m1 / scalar).currency should equal(m1.currency)
           }
@@ -257,6 +257,13 @@ class MoneySpec extends UnitSpec {
           val m1 = Money(amount1, c1)
           val m2 = Money(amount2, c1)
           (m1 max m2).amount should equal (m1.amount max m2.amount)
+        }
+      }
+      "change sign for unary minus" in {
+        forAll { (c1: Currency {type Key <: Currency.Key}, amount1: BigDecimal) ⇒
+          val m1 = Money(amount1, c1)
+          m1 should be (-(-m1))
+          (m1 + -m1) should be (Money(0, c1))
         }
       }
       "signum should return the sign of the value" in {

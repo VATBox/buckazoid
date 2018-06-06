@@ -24,8 +24,8 @@ class Money[C <: Currency.Key] private(a: BigDecimal)(val currency: Currency {ty
   def +[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyExchange[C] =
     MoneyExchange(currency, that.moneySeq :+ this)
 
-  def -[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyExchange[C] =
-    MoneyExchange(currency, that.moneySeq.map(-_) :+ this)
+  def -[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyExchange[C] = this + (-that)
+    //MoneyExchange(currency, that.moneySeq.map(-_) :+ this)
 
   //  def +[B: ToBigDecimal](that: B): Money[C] =
   //    Money(this.amount + that, this.currency)
@@ -116,12 +116,12 @@ class Money[C <: Currency.Key] private(a: BigDecimal)(val currency: Currency {ty
 
   def ===(that: Money[C]): Boolean = this.equals(that)
 
-  def ===[C2 <: Currency.Key](that: Money[C2]): MoneyCompare[C, C2] = {
+  def ===[C2 <: Currency.Key](that: Money[C2]): MoneyExchangeCompare[C, C2] = {
     this === (MoneyExchange(that.currency, Seq[Money[_ <: Currency.Key]](that)))
   }
 
-  def ===[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyCompare[C, C2] = {
-    MoneyCompare(MoneyExchange(this.currency, Seq[Money[_ <: Currency.Key]](this)), that)
+  def ===[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyExchangeCompare[C, C2] = {
+    MoneyExchangeCompare(MoneyExchange(this.currency, Seq[Money[_ <: Currency.Key]](this)), that)
   }
 
 }

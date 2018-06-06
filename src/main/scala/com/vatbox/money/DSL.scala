@@ -50,15 +50,18 @@ case class MoneyExchange[C <: Currency.Key](baseCurrency: Currency {type Key = C
   def -[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyExchange[C] =
     MoneyExchange(baseCurrency, moneySeq ++ that.moneySeq.map(-_))
 
+  def unary_- : MoneyExchange[C] = MoneyExchange(baseCurrency, moneySeq.map(-_))
+
+
   def in[C2 <: Currency.Key](unit: Currency {type Key = C2}): MoneyExchange[C2] =
     MoneyExchange(unit, moneySeq)
 
-  def ===[C2 <: Currency.Key](that: Money[C2]): MoneyCompare[C, C2] = {
+  def ===[C2 <: Currency.Key](that: Money[C2]): MoneyExchangeCompare[C, C2] = {
     this === (MoneyExchange(that.currency, Seq[Money[_ <: Currency.Key]](that)))
   }
 
-  def ===[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyCompare[C, C2] = {
-    MoneyCompare(this, that)
+  def ===[C2 <: Currency.Key](that: MoneyExchange[C2]): MoneyExchangeCompare[C, C2] = {
+    MoneyExchangeCompare(this, that)
   }
 }
 
@@ -66,7 +69,7 @@ trait ExchangeRate {
   def convert(base: Currency {type Key <: Currency.Key}, counter: Currency {type Key <: Currency.Key}, amount: BigDecimal, exchangeDate: Instant): Future[BigDecimal]
 }
 
-case class MoneyCompare[C1 <: Currency.Key, C2 <: Currency.Key](base: MoneyExchange[_<: C1], counter: MoneyExchange[_<: C2]) {
+case class MoneyExchangeCompare[C1 <: Currency.Key, C2 <: Currency.Key](base: MoneyExchange[_<: C1], counter: MoneyExchange[_<: C2]) {
   def at(exchangeDate: Instant)(implicit er: ExchangeRate, ec: ExecutionContext): Future[Boolean] = {
     (base - counter).at(exchangeDate).map { _.amount == 0 }
   }
