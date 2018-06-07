@@ -22,11 +22,11 @@ jobs:
 
       - run:
           name: Test
-          command:  sbt coverage test
+          command: sbt coverage test
 
       - run:
           name: Coverage Report
-          command:  sbt coverageReport
+          command: sbt coverageReport
 
       - save_cache:
           key: buckazoid-{{ checksum "build.sbt" }}-{{ checksum "project/Dependencies.scala" }}
@@ -53,6 +53,6 @@ jobs:
       - deploy:
           name: Publish
           command: |
-            if [ -n "${CIRCLE_TAG}" ]; then
-              sbt +publish
-            fi
+#            if [ -n "${CIRCLE_TAG}" ]; then
+              sbt +publishOnTag
+#            fi

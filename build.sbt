@@ -37,3 +37,12 @@ val bintray = List(
   bintrayVcsUrl := Option("""git@github.com:VATBox/buckazoid.git"""),
   bintrayPackageLabels := Seq("scala", "money", "currency")
 )
+
+lazy val publishOnTag = taskKey[Unit]("Publish when head is tag")
+publishOnTag := {
+  if (git.gitCurrentTags.value == version.value) {
+    clean.value
+    (Compile / compile).value
+    publish.value
+  }
+}
