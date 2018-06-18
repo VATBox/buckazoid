@@ -21,6 +21,7 @@ lazy val root = (project in file("."))
     organization := "com.vatbox",
     name := "Buckazoid",
     description := "Sensible money library",
+    skip / publish := true,
     bintray
   )
   .aggregate(core, contrib)
@@ -28,13 +29,13 @@ lazy val root = (project in file("."))
 
 lazy val core = (project in file("core"))
   .settings(
+    name := "buckazoid",
     libraryDependencies ++= Seq(
       scalaTest % Test,
       scalactic % Test,
       scalacheck % Test,
     ),
   )
-
 
 lazy val contrib = (project in file("contrib"))
   .settings(
