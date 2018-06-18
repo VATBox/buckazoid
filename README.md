@@ -23,7 +23,6 @@ To use Buckazoid in your Maven / Gradle project look at the [bintray repository]
 ```scala
 scala> import com.vatbox.money._
        import java.time.Instant
-       import scala.concurrent.Future
        import scala.concurrent._
        import scala.concurrent.duration._
        import scala.concurrent.ExecutionContext.Implicits.global
@@ -102,6 +101,24 @@ res9: Boolean = false
 scala> 50.0(EUR) === (100(USD) in EUR) at Instant.now foreach println
 true
 
+```
+
+#### Using [openexchange](https://openexchangerates.org/) as ExchangeRate:
+```scala
+scala> import com.vatbox.money.contrib.exchangerate._
+       import play.api.libs.ws.ahc.StandaloneAhcWSClient
+       import akka.actor.ActorSystem
+       import akka.stream.ActorMaterializer
+       
+       implicit val system = ActorSystem()
+       implicit val materializer = ActorMaterializer()
+       
+scala> implicit val client = PlayOpenExchangeRates(StandaloneAhcWSClient(), "https://openexchangerates.org/api/historical/", "[OPEN_EXCHANGE_RATES_KEY]")
+       
+scala> val total = EUR(5) + USD(10) + ILS(20) at Instant.parse("2018-06-18T00:00:00Z")
+total: scala.concurrent.Future[com.vatbox.money.Money[com.vatbox.money.EUR.Key]] = Future(<not completed>)
+scala> total foreach println
+18.355240 EUR
 
 ```
 
