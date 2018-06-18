@@ -53,6 +53,6 @@ jobs:
       - deploy:
           name: Publish
           command: |
-            if [ -n "${CIRCLE_TAG}" ]; then
+            if [ -n "$(git describe --exact-match --tags HEAD)" ]; then
               sbt +publish
             fi
