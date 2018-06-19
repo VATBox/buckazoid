@@ -104,6 +104,10 @@ true
 ```
 
 #### Using [openexchange](https://openexchangerates.org/) as ExchangeRate:
+Add the following dependency to your build
+
+    "com.vatbox"  %% "buckazoid"  % "LATEST_VERSION"
+
 ```scala
 scala> import com.vatbox.money.contrib.exchangerate._
        import play.api.libs.ws.ahc.StandaloneAhcWSClient
