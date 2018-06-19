@@ -11,11 +11,11 @@ class ImplicitSpec extends UnitSpec {
         }
       }
 
-//      "work for BigInt" in {
-//        forAll { (m1: Money[_ <: Currency.Key], a: BigInt) ⇒
-//          a * m1 should equal(m1 * a)
-//        }
-//      }
+      "work for BigInt" in {
+        forAll { (m1: Money[_ <: Currency.Key], a: BigInt) ⇒
+          a * m1 should equal(m1 * a)
+        }
+      }
 
       "work for Int" in {
         forAll { (m1: Money[_ <: Currency.Key], a: Int) ⇒

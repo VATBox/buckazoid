@@ -42,7 +42,7 @@ class DslSpec extends UnitSpec {
         }
       }
     }
-    "substracted from Money" in {
+    "subtracted from Money" in {
       forAll { (m1: Money[_ <: Currency.Key], m2: Money[_ <: Currency.Key], m3: Money[_ <: Currency.Key]) ⇒
         whenever(m1.currency != m2.currency && m1.currency != m3.currency) {
           val me = m2 + m3

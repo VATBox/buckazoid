@@ -39,7 +39,7 @@ package object money {
   }
 
   implicit class BigIntWithMoney(val x: BigInt) extends AnyVal {
-    def *[C <: Currency.Key](m: Money[C]): Money[C] = Money(BigDecimal(x) * m.amount, m.currency)
+    def *[C <: Currency.Key](m: Money[C]): Money[C] = m * x
   }
 
   implicit class MoneyToMoneyTolerance[C <: Currency.Key](val m: Money[C]) {
