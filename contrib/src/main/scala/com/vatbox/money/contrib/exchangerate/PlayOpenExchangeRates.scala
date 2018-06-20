@@ -6,6 +6,7 @@ import java.time.{Instant, ZoneOffset}
 import com.vatbox.money._
 import play.api.libs.json.JsValue
 import play.api.libs.ws.JsonBodyReadables._
+import play.api.libs.ws.DefaultBodyReadables._
 import play.api.libs.ws.StandaloneWSClient
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,7 +52,7 @@ trait PlayOpenExchangeRates extends ExchangeRate {
           if (message contains "invalid_base") throw new ExchangeRateException(s"Invalid `base` currency [$sourceCurrency]")
           else throw new ExchangeRateException(s"Fail to convert $sourceCurrency to $targetCurrency")
         case badStatus =>
-          println(s"$badStatus -> ${response.body[JsValue]}")
+          println(s"$badStatus -> ${response.body[String]}")
           throw new ExchangeRateException(s"Fail to convert $sourceCurrency to $targetCurrency")
       }
     }

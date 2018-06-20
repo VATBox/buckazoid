@@ -11,6 +11,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec}
 import play.api.libs.json.Json
 import play.api.libs.ws.JsonBodyWritables._
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -65,14 +66,13 @@ class PlayOpenExchangeRatesSpec extends WordSpec with Matchers with ScalaFutures
         val response = USD(100) in EUR at LocalDate.parse(queryDate).atStartOfDay().toInstant(ZoneOffset.UTC)
 
         whenReady(response) { r ⇒
-          println(s"response=$r")
           r should be (EUR(85))
         }
       }
     }
 
     "call with non exists counter currency" should {
-      "return value" in {
+      "fail with ExchangeRateException" in {
         val json =
           """
             |{
@@ -102,7 +102,7 @@ class PlayOpenExchangeRatesSpec extends WordSpec with Matchers with ScalaFutures
 
 
     "call with non exists source currency" should {
-      "return value" in {
+      "fail with ExchangeRateException" in {
         val errorJson =
           """
             |{
@@ -124,6 +124,23 @@ class PlayOpenExchangeRatesSpec extends WordSpec with Matchers with ScalaFutures
         implicit val ppenExchangeRates = PlayOpenExchangeRates(ws, "https://openexchangerates.org/api/historical", "key")
 
         val response = BKZ(100) in EUR at LocalDate.parse(queryDate).atStartOfDay().toInstant(ZoneOffset.UTC)
+
+        assert(response.failed.futureValue.isInstanceOf[ExchangeRateException])
+      }
+    }
+
+    "server failure" should {
+      "fail with ExchangeRateException" in {
+        val ws = StandaloneFakeWSClient {
+          case r if r == FakeRequest("GET", "https://openexchangerates.org/api/historical/2018-06-09.json?app_id=key&base=USD&symbols=EUR") ⇒
+            InternalServerError("Server Error")
+          case r ⇒
+            throw new RuntimeException("Unexpected call")
+        }
+
+        implicit val ppenExchangeRates = PlayOpenExchangeRates(ws, "https://openexchangerates.org/api/historical", "key")
+
+        val response = USD(100) in EUR at LocalDate.parse(queryDate).atStartOfDay().toInstant(ZoneOffset.UTC)
 
         assert(response.failed.futureValue.isInstanceOf[ExchangeRateException])
       }
