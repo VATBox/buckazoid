@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     working_directory: ~/build
@@ -56,3 +56,10 @@ jobs:
             if [ -n "$(git describe --exact-match --tags HEAD)" ]; then
               sbt +publish
             fi
+
+workflows:
+  version: 2.1
+  build-push:
+    jobs:
+      - build: # If your job name isn't build, change it
+          context: env-global
