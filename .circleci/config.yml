@@ -52,10 +52,7 @@ jobs:
 
       - deploy:
           name: Publish
-          command: |
-#            if [ -n "$(git describe --exact-match --tags HEAD)" ]; then
-            sbt +publish
-#            fi
+          command: sbt +publish
 
 workflows:
   version: 2.1
