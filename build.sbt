@@ -1,5 +1,7 @@
 import Dependencies._
 
+lazy val buildNumber = sys.props.getOrElse("BUILD_NUMBER", default = "dev")
+
 val baseSettings = Seq(
   scalaVersion := "2.12.6",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.12"), //, "2.10.6")
@@ -17,6 +19,7 @@ val baseSettings = Seq(
   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   organization := "com.vatbox",
   description := "Sensible money library",
+  version := s"0.0.$buildNumber"
 )
 
 lazy val root = (project in file("."))
