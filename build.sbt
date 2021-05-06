@@ -1,6 +1,8 @@
 import Dependencies._
 
-lazy val buildNumber = sys.props.getOrElse("BUILD_NUMBER", default = "dev")
+//In order to use this, need to set a value for BUILD_NUMBER variable
+//lazy val buildNumber = sys.props.getOrElse("BUILD_NUMBER", default = "dev")
+lazy val buildNumber = "13"
 
 val baseSettings = Seq(
   scalaVersion := "2.12.6",
