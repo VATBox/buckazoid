@@ -34,18 +34,27 @@ lazy val core = (project in file("core"))
   .settings(
     baseSettings,
     name := "buckazoid",
+    publishTo := Some("Artifactory Realm" at "https://vatbox.jfrog.io/vatbox/sbt-local"),
+    credentials ++= Seq(
+      Credentials(Path.userHome / ".ivy2" / ".credentials"),
+      Credentials("Artifactory Realm", "vatbox.jfrog.io", System.getenv("ART_USER"), System.getenv("ART_KEY"))
+    ),
     libraryDependencies ++= Seq(
       scalaTest % Test,
       scalactic % Test,
       scalacheck % Test,
-    ),
-    bintray
+    )
   )
 
 lazy val contrib = (project in file("contrib"))
   .settings(
     baseSettings,
     name := "buckazoid-contrib",
+    publishTo := Some("Artifactory Realm" at "https://vatbox.jfrog.io/vatbox/sbt-local"),
+    credentials ++= Seq(
+      Credentials(Path.userHome / ".ivy2" / ".credentials"),
+      Credentials("Artifactory Realm", "vatbox.jfrog.io", System.getenv("ART_USER"), System.getenv("ART_KEY"))
+    ),
     libraryDependencies ++= Seq(
       wsClient,
       wsClientJson,
@@ -53,16 +62,6 @@ lazy val contrib = (project in file("contrib"))
       scalactic % Test,
       scalacheck % Test,
       fakeWsClient % Test
-    ),
-    bintray
+    )
   )
   .dependsOn(core % "compile->compile;test->test")
-
-
-val bintray = List(
-  publishMavenStyle := true,
-  bintrayRepository := "maven",
-  bintrayOrganization := Option("vatbox-oss"),
-  bintrayVcsUrl := Option("""git@github.com:VATBox/buckazoid.git"""),
-  bintrayPackageLabels := Seq("scala", "money", "currency")
-)
